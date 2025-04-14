@@ -1,0 +1,215 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="display-5">
+                <i class="fas fa-chart-bar me-2"></i> Traffic Analysis Results
+            </h1>
+            <p class="lead">Analysis complete! Here are the results of your traffic lane analysis.</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="fas fa-home me-1"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header bg-dark">
+                <h4><i class="fas fa-traffic-light me-2"></i> Traffic Control Decision</h4>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center">
+                        <h5>Lane {{ green_lane }} gets the GREEN light!</h5>
+                        <div class="mt-3 mb-3">
+                            <i class="fas fa-traffic-light fa-5x text-success"></i>
+                        </div>
+                        <p>Based on priority scoring and traffic conditions</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Decision Factors:</h5>
+                        <ul>
+                            {% for result in results %}
+                                {% if result.lane_number == green_lane %}
+                                    <li><strong>Vehicle Count:</strong> {{ result.counts.vehicles }}</li>
+                                    <li><strong>Pedestrian Count:</strong> {{ result.counts.pedestrians }}</li>
+                                    {% if result.has_emergency %}
+                                    <li class="text-danger"><strong>Emergency Vehicle Present!</strong></li>
+                                    {% endif %}
+                                    <li><strong>Total Priority Score:</strong> {{ "%.2f"|format(result.priority_score.total_score) }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for result in results %}
+    <div class="col-md-6 mb-4">
+        <div class="lane-container {% if result.lane_number == green_lane %}green-light{% else %}red-light{% endif %}">
+            <div class="lane-header">
+                <h4>Lane {{ result.lane_number }}</h4>
+                <div class="priority-score">
+                    Score: {{ "%.2f"|format(result.priority_score.total_score) }}
+                </div>
+            </div>
+            
+            <!-- Traffic Light Status -->
+            <div class="text-center mb-3">
+                {% if result.lane_number == green_lane %}
+                    <span class="badge bg-success p-2"><i class="fas fa-traffic-light me-1"></i> GREEN LIGHT</span>
+                {% else %}
+                    <span class="badge bg-danger p-2"><i class="fas fa-traffic-light me-1"></i> RED LIGHT</span>
+                {% endif %}
+            </div>
+            
+            <!-- Alert Badges -->
+            <div class="mb-3 text-center">
+                {% if result.has_emergency %}
+                    <span class="emergency-badge me-2">
+                        <i class="fas fa-ambulance me-1"></i> EMERGENCY VEHICLE!
+                    </span>
+                {% endif %}
+                
+                {% if result.has_jaywalkers %}
+                    <span class="jaywalker-badge">
+                        <i class="fas fa-walking me-1"></i> JAYWALKER!
+                    </span>
+                {% endif %}
+            </div>
+            
+            <!-- Count Badges -->
+            <div class="mb-3 text-center">
+                <span class="count-badge badge bg-primary">
+                    <i class="fas fa-car me-1"></i> {{ result.counts.vehicles }} Vehicles
+                </span>
+                <span class="count-badge badge bg-info">
+                    <i class="fas fa-walking me-1"></i> {{ result.counts.pedestrians }} Pedestrians
+                </span>
+                {% if result.counts.jaywalkers > 0 %}
+                <span class="count-badge badge bg-warning">
+                    <i class="fas fa-walking me-1"></i> {{ result.counts.jaywalkers }} Jaywalkers
+                </span>
+                {% endif %}
+            </div>
+            
+            <!-- Lane Visualization -->
+            <div class="lane-visualization mb-4">
+                <div class="road">
+                    <!-- Vehicles -->
+                    {% for i in range(result.counts.vehicles) %}
+                        <div class="vehicle" style="left: {{ 5 + (i * 10) % 80 }}%; top: {{ 20 + (i * 15) % 50 }}px;">
+                            <i class="fas fa-car"></i>
+                        </div>
+                    {% endfor %}
+                    
+                    <!-- Emergency Vehicles -->
+                    {% if result.has_emergency %}
+                        <div class="vehicle emergency" style="left: 50%; top: 40px;">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Pedestrians -->
+                    {% for i in range(result.counts.pedestrians - result.counts.jaywalkers) %}
+                        <div class="pedestrian" style="left: {{ 10 + (i * 12) % 85 }}%; top: -10px;">
+                            <i class="fas fa-walking"></i>
+                        </div>
+                    {% endfor %}
+                    
+                    <!-- Jaywalkers -->
+                    {% for i in range(result.counts.jaywalkers) %}
+                        <div class="pedestrian jaywalker" style="left: {{ 30 + (i * 15) % 60 }}%; top: 45px;">
+                            <i class="fas fa-running"></i>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Priority Score Breakdown -->
+            <div class="score-breakdown">
+                <h6>Priority Score Breakdown:</h6>
+                <div class="small">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Vehicles:</strong> {{ result.counts.vehicles }} × 1.0 = {{ result.priority_score.breakdown.vehicles.score|float }}</p>
+                            <p><strong>Pedestrians:</strong> {{ result.counts.pedestrians }} × 0.5 = {{ result.priority_score.breakdown.pedestrians.score|float }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Jaywalkers:</strong> {{ result.counts.jaywalkers }} × -0.25 = {{ result.priority_score.breakdown.jaywalkers.score|float }}</p>
+                            <p><strong>Emergency:</strong> {{ result.priority_score.breakdown.emergency_vehicles.score|float }}</p>
+                            <p><strong>Starvation Bonus:</strong> {{ result.priority_score.breakdown.starvation_control.score|float }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="fw-bold">Total Score: {{ "%.2f"|format(result.priority_score.total_score) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+/* Styles for lane visualization */
+.lane-visualization {
+    position: relative;
+    margin: 20px 0;
+}
+.road {
+    position: relative;
+    height: 100px;
+    background-color: #444;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.road:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(to right, #fff, #fff 20px, transparent 20px, transparent 40px);
+    margin-top: -2px;
+}
+.vehicle {
+    position: absolute;
+    font-size: 20px;
+    color: #ccc;
+    z-index: 2;
+}
+.vehicle.emergency {
+    color: red;
+    font-size: 24px;
+    animation: blink 1s infinite;
+}
+.pedestrian {
+    position: absolute;
+    font-size: 18px;
+    color: #fff;
+    z-index: 2;
+}
+.pedestrian.jaywalker {
+    color: orange;
+}
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+</style>
+{% endblock %}

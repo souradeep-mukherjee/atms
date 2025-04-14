@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+
+{% block title %}Traffic Analytics Statistics{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Traffic Analytics Statistics</h1>
+    
+    <!-- Summary metrics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Events</h5>
+                    <h2 class="card-text">{{ sim_count + upload_count }}</h2>
+                    <p class="card-text text-muted">
+                        {{ upload_count }} uploads / {{ sim_count }} simulations
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Vehicles</h5>
+                    <h2 class="card-text">{{ total_vehicles }}</h2>
+                    <p class="card-text text-muted">Average: {{ "%.1f"|format(avg_vehicles) }} per lane</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Pedestrians</h5>
+                    <h2 class="card-text">{{ total_pedestrians }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Emergency Vehicles</h5>
+                    <h2 class="card-text">{{ total_emergency }}</h2>
+                    <p class="card-text text-muted">{{ "%.1f"|format(emergency_percentage) }}% of lanes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Lane priority distribution -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lane Priority Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="progress" style="height: 30px;">
+                                {% for lane, percentage in green_percentages.items() %}
+                                <div class="progress-bar bg-success {{ 'progress-bar-striped' if lane == 1 }}" 
+                                     role="progressbar" 
+                                     style="width: {{ percentage }}%" 
+                                     aria-valuenow="{{ percentage }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    Lane {{ lane }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                {% for lane, percentage in green_percentages.items() %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Lane {{ lane }}
+                                    <span class="badge bg-success rounded-pill">{{ "%.1f"|format(percentage) }}%</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent events table -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Recent Events</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Timestamp</th>
+                            <th>Type</th>
+                            <th>Lanes</th>
+                            <th>Green Light</th>
+                            <th>Total Vehicles</th>
+                            <th>Total Pedestrians</th>
+                            <th>Emergency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event in events %}
+                        <tr>
+                            <td>{{ event.id }}</td>
+                            <td>{{ event.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                {% if event.event_type == 'upload' %}
+                                <span class="badge bg-primary">Upload</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Simulation</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ event.lane_count }}</td>
+                            <td>
+                                <span class="badge bg-success">Lane {{ event.green_lane }}</span>
+                            </td>
+                            <td>
+                                {% if event.stats.total_vehicles is defined %}
+                                {{ event.stats.total_vehicles }}
+                                {% else %}
+                                N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if event.stats.total_pedestrians is defined %}
+                                {{ event.stats.total_pedestrians }}
+                                {% else %}
+                                N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if event.stats.has_emergency %}
+                                <span class="badge bg-danger">Yes</span>
+                                {% else %}
+                                <span class="badge bg-secondary">No</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="alert alert-info">
+        <h5>About the Data</h5>
+        <p>This page shows anonymized statistics from traffic analysis events. No images or personally identifiable information is stored.</p>
+        <p>The data is used to improve traffic flow algorithms and scheduling.</p>
+    </div>
+    
+    <div class="mb-3">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
+        <a href="{{ url_for('simulator') }}" class="btn btn-primary">Try Simulator</a>
+    </div>
+</div>
+{% endblock %}

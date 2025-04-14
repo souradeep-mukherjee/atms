@@ -1,0 +1,34 @@
+Detection Results for lane_1_c3353fad-1d06-43fd-8442-e5e8a80201e5.jpg
+==================================================
+
+Counts:
+  Vehicles: 4
+  Pedestrians: 3
+  Emergency Vehicles: 1
+  Jaywalkers: 0
+
+WARNING: EMERGENCY VEHICLE DETECTED!
+
+Vehicle Detections:
+  Vehicle 1: bicycle (Confidence: 0.94)
+    Box: (164, 10, 227, 79)
+  Vehicle 2: truck (Confidence: 0.89)
+    Box: (446, 289, 517, 357)
+  Vehicle 3: bus (Confidence: 0.91)
+    Box: (441, 255, 512, 323)
+  Vehicle 4: bicycle (Confidence: 0.75)
+    Box: (379, 325, 492, 421)
+  Vehicle 5: emergency_vehicle (Confidence: 0.92)
+    Box: (422, 254, 537, 368)
+
+Pedestrian Detections:
+  Pedestrian 1: (Confidence: 0.60)
+    Box: (182, 312, 251, 383)
+  Pedestrian 2: (Confidence: 0.79)
+    Box: (246, 63, 314, 201)
+  Pedestrian 3: (Confidence: 0.71)
+    Box: (370, 246, 434, 392)
+
+Emergency Vehicle Detections:
+  Emergency 1: (Confidence: 0.92)
+    Box: (422, 254, 537, 368)

@@ -1,0 +1,77 @@
+### **Replit Prompt: Automated Traffic Control System (Python)**  
+
+**Project Name:** Automated Traffic Control System  
+**Language:** Python  
+**Key Technologies:**  
+- **YOLOv8 (Ultralytics)** – Real-time object detection  
+- **OpenCV** – Image processing & annotation  
+- **NumPy** – Numerical operations  
+- **Matplotlib (Optional)** – Debugging visualizations  
+
+---  
+
+### **How It Works**  
+
+1. **Input:**  
+   - Upload **2-4 lane images** (simulating different traffic directions).  
+
+2. **Object Detection (YOLOv8):**  
+   - Detects:  
+     - **Vehicles** (cars, buses, trucks, bikes)  
+     - **Emergency vehicles** (ambulance, fire truck, police)  
+     - **Pedestrians** (crossing/jaywalking)  
+
+3. **Priority Calculation:**  
+   - **Vehicle Count:** 1 point per vehicle  
+   - **Pedestrians:** 0.5 points each (unless jaywalking)  
+   - **Emergency Vehicles:** Highest priority (overrides normal scoring)  
+   - **Starvation Control:** Lanes waiting too long get bonus points  
+
+4. **Decision & Visualization:**  
+   - Selects lane with **highest priority score** for **green light**  
+   - Displays:  
+     - Original vs. annotated images (bounding boxes, counts)  
+     - Traffic light status (red/green)  
+     - Priority score breakdown  
+
+5. **Cleanup:**  
+   - Deletes temporary files for efficiency  
+
+---  
+
+### **Expected Output:**  
+- **Annotated images** (vehicles, pedestrians marked)  
+- **Priority scores** for each lane  
+- **Selected lane** for green signal  
+- **Warnings** (jaywalking, emergency vehicle detected)  
+
+---  
+
+### **Replit Setup (Dependencies):**  
+```python
+# Required Libraries
+!pip install ultralytics opencv-python numpy matplotlib
+```
+
+### **File Structure:**  
+```
+traffic_control/  
+├── main.py               # Main logic  
+├── detector.py           # YOLOv8 detection  
+├── scheduler.py          # Priority scoring  
+├── visualizer.py         # OpenCV annotations  
+└── test_images/          # Sample inputs  
+```
+
+---  
+
+### **Bonus Features (Optional):**  
+✅ **Web Interface (Flask)**  
+✅ **Real-time Video Input**  
+✅ **IoT Traffic Light Integration**  
+
+---  
+
+**Ready to build?** Start with `main.py` for the core logic! 🚦🚗  
+
+Would you like any part expanded (e.g., full code snippets, more details on scoring)?

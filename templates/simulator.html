@@ -1,0 +1,311 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="display-5">
+                <i class="fas fa-sliders-h me-2"></i> Traffic Simulator
+            </h1>
+            <p class="lead">Simulate traffic conditions for 2-4 lanes and analyze how the system prioritizes traffic flow.</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-1"></i> Back to Main Page
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark">
+        <h4><i class="fas fa-cogs me-2"></i> Simulation Controls</h4>
+    </div>
+    <div class="card-body">
+        <form id="simulator-form" action="{{ url_for('run_simulation') }}" method="POST">
+            <div class="mb-4">
+                <label class="form-label">Number of lanes:</label>
+                <div class="btn-group mb-3" role="group">
+                    <input type="radio" class="btn-check" name="lane_count" id="lane-2" value="2" checked>
+                    <label class="btn btn-outline-primary" for="lane-2">2 Lanes</label>
+                    
+                    <input type="radio" class="btn-check" name="lane_count" id="lane-3" value="3">
+                    <label class="btn btn-outline-primary" for="lane-3">3 Lanes</label>
+                    
+                    <input type="radio" class="btn-check" name="lane_count" id="lane-4" value="4">
+                    <label class="btn btn-outline-primary" for="lane-4">4 Lanes</label>
+                </div>
+            </div>
+
+            <div id="lanes-container">
+                <!-- Lane 1 -->
+                <div class="lane-config mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Lane 1</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="vehicles-1" class="form-label">Vehicles</label>
+                                        <input type="number" class="form-control" id="vehicles-1" name="vehicles_1" min="0" max="20" value="5">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="pedestrians-1" class="form-label">Pedestrians</label>
+                                        <input type="number" class="form-control" id="pedestrians-1" name="pedestrians_1" min="0" max="15" value="2">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="jaywalkers-1" class="form-label">Jaywalkers</label>
+                                        <input type="number" class="form-control" id="jaywalkers-1" name="jaywalkers_1" min="0" max="5" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="emergency-1" name="emergency_1">
+                                        <label class="form-check-label" for="emergency-1">
+                                            Emergency Vehicle
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lane 2 -->
+                <div class="lane-config mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Lane 2</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="vehicles-2" class="form-label">Vehicles</label>
+                                        <input type="number" class="form-control" id="vehicles-2" name="vehicles_2" min="0" max="20" value="8">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="pedestrians-2" class="form-label">Pedestrians</label>
+                                        <input type="number" class="form-control" id="pedestrians-2" name="pedestrians_2" min="0" max="15" value="1">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="jaywalkers-2" class="form-label">Jaywalkers</label>
+                                        <input type="number" class="form-control" id="jaywalkers-2" name="jaywalkers_2" min="0" max="5" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="emergency-2" name="emergency_2">
+                                        <label class="form-check-label" for="emergency-2">
+                                            Emergency Vehicle
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lane 3 (initially hidden) -->
+                <div class="lane-config mb-4" style="display: none;">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Lane 3</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="vehicles-3" class="form-label">Vehicles</label>
+                                        <input type="number" class="form-control" id="vehicles-3" name="vehicles_3" min="0" max="20" value="3">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="pedestrians-3" class="form-label">Pedestrians</label>
+                                        <input type="number" class="form-control" id="pedestrians-3" name="pedestrians_3" min="0" max="15" value="4">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="jaywalkers-3" class="form-label">Jaywalkers</label>
+                                        <input type="number" class="form-control" id="jaywalkers-3" name="jaywalkers_3" min="0" max="5" value="1">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="emergency-3" name="emergency_3">
+                                        <label class="form-check-label" for="emergency-3">
+                                            Emergency Vehicle
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lane 4 (initially hidden) -->
+                <div class="lane-config mb-4" style="display: none;">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Lane 4</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="vehicles-4" class="form-label">Vehicles</label>
+                                        <input type="number" class="form-control" id="vehicles-4" name="vehicles_4" min="0" max="20" value="6">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="pedestrians-4" class="form-label">Pedestrians</label>
+                                        <input type="number" class="form-control" id="pedestrians-4" name="pedestrians_4" min="0" max="15" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="jaywalkers-4" class="form-label">Jaywalkers</label>
+                                        <input type="number" class="form-control" id="jaywalkers-4" name="jaywalkers_4" min="0" max="5" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="emergency-4" name="emergency_4">
+                                        <label class="form-check-label" for="emergency-4">
+                                            Emergency Vehicle
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Starvation Control:</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="starvation-control" name="starvation_control" checked>
+                    <label class="form-check-label" for="starvation-control">Enable starvation control (lanes waiting longer get bonus points)</label>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Previous green light:</label>
+                <select class="form-select" id="prev-green" name="prev_green">
+                    <option value="0">None (first cycle)</option>
+                    <option value="1">Lane 1</option>
+                    <option value="2">Lane 2</option>
+                    <option value="3" class="lane-3-option" style="display: none;">Lane 3</option>
+                    <option value="4" class="lane-4-option" style="display: none;">Lane 4</option>
+                </select>
+                <div class="form-text">This is used to calculate starvation control bonus.</div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-play-circle me-2"></i> Run Traffic Simulation
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark">
+        <h4><i class="fas fa-info-circle me-2"></i> How It Works</h4>
+    </div>
+    <div class="card-body">
+        <p>The simulator allows you to test various traffic scenarios by adjusting the following parameters:</p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <ul>
+                    <li><strong>Vehicles:</strong> Number of vehicles in each lane</li>
+                    <li><strong>Pedestrians:</strong> Number of pedestrians waiting to cross</li>
+                    <li><strong>Jaywalkers:</strong> Pedestrians crossing illegally (slight priority penalty)</li>
+                    <li><strong>Emergency Vehicles:</strong> Presence of emergency vehicles (highest priority)</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul>
+                    <li><strong>Starvation Control:</strong> Gives bonus points to lanes waiting longer</li>
+                    <li><strong>Previous Green Light:</strong> Indicates which lane had the green light before</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle lane count selection
+    const laneRadios = document.querySelectorAll('input[name="lane_count"]');
+    const laneConfigs = document.querySelectorAll('.lane-config');
+    const lane3Options = document.querySelectorAll('.lane-3-option');
+    const lane4Options = document.querySelectorAll('.lane-4-option');
+    
+    laneRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const laneCount = parseInt(this.value);
+            
+            // Hide all lanes first
+            laneConfigs.forEach((config, index) => {
+                if (index < laneCount) {
+                    config.style.display = 'block';
+                } else {
+                    config.style.display = 'none';
+                }
+            });
+            
+            // Update previous green light options
+            lane3Options.forEach(option => {
+                option.style.display = laneCount >= 3 ? 'block' : 'none';
+            });
+            
+            lane4Options.forEach(option => {
+                option.style.display = laneCount >= 4 ? 'block' : 'none';
+            });
+        });
+    });
+    
+    // Validate jaywalkers don't exceed pedestrians
+    const pedestrianInputs = document.querySelectorAll('input[id^="pedestrians-"]');
+    const jaywalkerInputs = document.querySelectorAll('input[id^="jaywalkers-"]');
+    
+    jaywalkerInputs.forEach((input, index) => {
+        input.addEventListener('change', function() {
+            const pedestrianCount = parseInt(pedestrianInputs[index].value);
+            const jaywalkerCount = parseInt(this.value);
+            
+            if (jaywalkerCount > pedestrianCount) {
+                this.value = pedestrianCount;
+                alert(`Jaywalkers cannot exceed the number of pedestrians (${pedestrianCount}).`);
+            }
+        });
+        
+        pedestrianInputs[index].addEventListener('change', function() {
+            const pedestrianCount = parseInt(this.value);
+            const jaywalkerCount = parseInt(jaywalkerInputs[index].value);
+            
+            if (jaywalkerCount > pedestrianCount) {
+                jaywalkerInputs[index].value = pedestrianCount;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
