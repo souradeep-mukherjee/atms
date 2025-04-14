@@ -1,0 +1,36 @@
+Detection Results for lane_3_386e4153-bd22-4f35-ae65-8de5556e7a57.jpg
+==================================================
+
+Counts:
+  Vehicles: 2
+  Pedestrians: 5
+  Emergency Vehicles: 0
+  Jaywalkers: 3
+
+CAUTION: JAYWALKER DETECTED!
+
+Vehicle Detections:
+  Vehicle 1: bus (Confidence: 0.82)
+    Box: (365, 144, 464, 233)
+  Vehicle 2: car (Confidence: 0.86)
+    Box: (153, 80, 256, 174)
+
+Pedestrian Detections:
+  Pedestrian 1: (Confidence: 0.61)
+    Box: (528, 217, 573, 313)
+  Pedestrian 2: (Confidence: 0.61)
+    Box: (337, 277, 389, 362)
+  Pedestrian 3: (Confidence: 0.94)
+    Box: (413, 239, 476, 315)
+  Pedestrian 4: (Confidence: 0.63)
+    Box: (225, 37, 274, 124)
+  Pedestrian 5: (Confidence: 0.74)
+    Box: (127, 247, 170, 381)
+
+Jaywalker Detections:
+  Jaywalker 1: (Confidence: 0.61)
+    Box: (337, 277, 389, 362)
+  Jaywalker 2: (Confidence: 0.94)
+    Box: (413, 239, 476, 315)
+  Jaywalker 3: (Confidence: 0.61)
+    Box: (528, 217, 573, 313)

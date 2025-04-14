@@ -1,0 +1,36 @@
+Detection Results for lane_2_620297c9-568f-4cfd-b46f-f9793a85425b.jpg
+==================================================
+
+Counts:
+  Vehicles: 5
+  Pedestrians: 3
+  Emergency Vehicles: 0
+  Jaywalkers: 2
+
+CAUTION: JAYWALKER DETECTED!
+
+Vehicle Detections:
+  Vehicle 1: bicycle (Confidence: 0.62)
+    Box: (73, 182, 192, 258)
+  Vehicle 2: bicycle (Confidence: 0.84)
+    Box: (396, 281, 446, 334)
+  Vehicle 3: car (Confidence: 0.83)
+    Box: (296, 79, 355, 150)
+  Vehicle 4: bicycle (Confidence: 0.87)
+    Box: (372, 358, 520, 435)
+  Vehicle 5: bus (Confidence: 0.80)
+    Box: (438, 258, 551, 329)
+
+Pedestrian Detections:
+  Pedestrian 1: (Confidence: 0.87)
+    Box: (219, 231, 266, 380)
+  Pedestrian 2: (Confidence: 0.68)
+    Box: (92, 64, 153, 187)
+  Pedestrian 3: (Confidence: 0.67)
+    Box: (184, 130, 229, 209)
+
+Jaywalker Detections:
+  Jaywalker 1: (Confidence: 0.67)
+    Box: (184, 130, 229, 209)
+  Jaywalker 2: (Confidence: 0.87)
+    Box: (219, 231, 266, 380)

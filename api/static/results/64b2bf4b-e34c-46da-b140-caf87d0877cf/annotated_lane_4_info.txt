@@ -1,0 +1,48 @@
+Detection Results for lane_4_37ca4ff7-a13c-43f1-b833-b5c119a6ac74.jpg
+==================================================
+
+Counts:
+  Vehicles: 14
+  Pedestrians: 4
+  Emergency Vehicles: 0
+  Jaywalkers: 0
+
+Vehicle Detections:
+  Vehicle 1: bus (Confidence: 0.61)
+    Box: (149, 108, 202, 178)
+  Vehicle 2: bicycle (Confidence: 0.61)
+    Box: (239, 219, 327, 292)
+  Vehicle 3: car (Confidence: 0.72)
+    Box: (78, 226, 146, 292)
+  Vehicle 4: motorcycle (Confidence: 0.66)
+    Box: (443, 342, 559, 416)
+  Vehicle 5: bus (Confidence: 0.82)
+    Box: (136, 329, 260, 387)
+  Vehicle 6: car (Confidence: 0.62)
+    Box: (461, 131, 561, 189)
+  Vehicle 7: bicycle (Confidence: 0.91)
+    Box: (441, 293, 552, 382)
+  Vehicle 8: car (Confidence: 0.67)
+    Box: (376, 31, 525, 85)
+  Vehicle 9: car (Confidence: 0.62)
+    Box: (61, 84, 210, 157)
+  Vehicle 10: bicycle (Confidence: 0.75)
+    Box: (453, 208, 524, 277)
+  Vehicle 11: motorcycle (Confidence: 0.67)
+    Box: (284, 200, 362, 276)
+  Vehicle 12: bus (Confidence: 0.83)
+    Box: (159, 23, 268, 105)
+  Vehicle 13: car (Confidence: 0.66)
+    Box: (269, 281, 405, 369)
+  Vehicle 14: bus (Confidence: 0.67)
+    Box: (262, 367, 362, 419)
+
+Pedestrian Detections:
+  Pedestrian 1: (Confidence: 0.71)
+    Box: (212, 272, 267, 374)
+  Pedestrian 2: (Confidence: 0.62)
+    Box: (475, 62, 542, 174)
+  Pedestrian 3: (Confidence: 0.85)
+    Box: (522, 225, 569, 354)
+  Pedestrian 4: (Confidence: 0.63)
+    Box: (535, 330, 581, 470)
